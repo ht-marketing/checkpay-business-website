@@ -14,11 +14,11 @@ const AboutPage = () => {
   return (
     <>
       <Breadcrumb
-        pageName="About Page"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius eros eget sapien consectetur ultrices. Ut quis dapibus libero."
+        pageName="Về Chúng Tôi"
+        description="Chúng tôi là một công ty chuyên cung cấp các giải pháp công nghệ cho các cá nhân và doanh nghiệp."
       />
       <AboutSectionOne />
-      <AboutSectionTwo />
+      {/* <AboutSectionTwo /> */}
     </>
   );
 };

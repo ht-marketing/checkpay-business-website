@@ -11,8 +11,8 @@ const Pricing = () => {
     <section id="pricing" className="relative z-10 py-16 md:py-20 lg:py-28">
       <div className="container">
         <SectionTitle
-          title="Simple and Affordable Pricing"
-          paragraph="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form."
+          title="Các gói dịch vụ"
+          paragraph="Chúng tôi cung cấp các gói dịch vụ phù hợp với nhu cầu của bạn. Hãy chọn gói dịch vụ phù hợp với bạn nhất."
           center
           width="665px"
         />
@@ -21,13 +21,12 @@ const Pricing = () => {
           <div className="mb-8 flex justify-center md:mb-12 lg:mb-16">
             <span
               onClick={() => setIsMonthly(true)}
-              className={`${
-                isMonthly
-                  ? "pointer-events-none text-primary"
-                  : "text-dark dark:text-white"
-              } mr-4 cursor-pointer text-base font-semibold`}
+              className={`${isMonthly
+                ? "pointer-events-none text-primary"
+                : "text-dark dark:text-white"
+                } mr-4 cursor-pointer text-base font-semibold`}
             >
-              Monthly
+              Theo tháng
             </span>
             <div
               onClick={() => setIsMonthly(!isMonthly)}
@@ -36,9 +35,8 @@ const Pricing = () => {
               <div className="relative">
                 <div className="h-5 w-14 rounded-full bg-[#1D2144] shadow-inner"></div>
                 <div
-                  className={`${
-                    isMonthly ? "" : "translate-x-full"
-                  } shadow-switch-1 absolute left-0 top-[-4px] flex h-7 w-7 items-center justify-center rounded-full bg-primary transition`}
+                  className={`${isMonthly ? "" : "translate-x-full"
+                    } shadow-switch-1 absolute left-0 top-[-4px] flex h-7 w-7 items-center justify-center rounded-full bg-primary transition`}
                 >
                   <span className="active h-4 w-4 rounded-full bg-white"></span>
                 </div>
@@ -46,13 +44,12 @@ const Pricing = () => {
             </div>
             <span
               onClick={() => setIsMonthly(false)}
-              className={`${
-                isMonthly
-                  ? "text-dark dark:text-white"
-                  : "pointer-events-none text-primary"
-              } ml-4 cursor-pointer text-base font-semibold`}
+              className={`${isMonthly
+                ? "text-dark dark:text-white"
+                : "pointer-events-none text-primary"
+                } ml-4 cursor-pointer text-base font-semibold`}
             >
-              Yearly
+              Theo năm
             </span>
           </div>
         </div>
@@ -60,42 +57,39 @@ const Pricing = () => {
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
           <PricingBox
             packageName="Lite"
-            price={isMonthly ? "40" : "120"}
-            duration={isMonthly ? "mo" : "yr"}
-            subtitle="Lorem ipsum dolor sit amet adiscing elit Mauris egestas enim."
+            price={isMonthly ? "350" : "120"}
+            duration={isMonthly ? "tháng" : "năm"}
+            subtitle="Gói Lite dành cho các cửa hàng có doanh thu dưới 100 triệu/tháng."
           >
-            <OfferList text="All UI Components" status="active" />
-            <OfferList text="Use with Unlimited Projects" status="active" />
-            <OfferList text="Commercial Use" status="active" />
-            <OfferList text="Email Support" status="active" />
-            <OfferList text="Lifetime Access" status="inactive" />
-            <OfferList text="Free Lifetime Updates" status="inactive" />
+            <OfferList text="Miễn phí tư vấn và cài đặt" status="active" />
+            <OfferList text="Sử dụng không giới hạn" status="active" />
+            <OfferList text="Truy cập trên các nền tảng" status="active" />
+            <OfferList text="Hỗ trợ qua email và điện thoại" status="active" />
+            <OfferList text="Cập nhật miễn phí" status="active" />
           </PricingBox>
           <PricingBox
             packageName="Basic"
             price={isMonthly ? "399" : "789"}
-            duration={isMonthly ? "mo" : "yr"}
-            subtitle="Lorem ipsum dolor sit amet adiscing elit Mauris egestas enim."
+            duration={isMonthly ? "tháng" : "năm"}
+            subtitle="Gói Basic dành cho các cửa hàng có doanh thu từ 100 triệu - 500 triệu/tháng."
           >
-            <OfferList text="All UI Components" status="active" />
-            <OfferList text="Use with Unlimited Projects" status="active" />
-            <OfferList text="Commercial Use" status="active" />
-            <OfferList text="Email Support" status="active" />
-            <OfferList text="Lifetime Access" status="active" />
-            <OfferList text="Free Lifetime Updates" status="inactive" />
+            <OfferList text="Miễn phí tư vấn và cài đặt" status="active" />
+            <OfferList text="Sử dụng không giới hạn" status="active" />
+            <OfferList text="Truy cập trên các nền tảng" status="active" />
+            <OfferList text="Hỗ trợ qua email và điện thoại" status="active" />
+            <OfferList text="Cập nhật miễn phí" status="active" />
           </PricingBox>
           <PricingBox
             packageName="Plus"
             price={isMonthly ? "589" : "999"}
-            duration={isMonthly ? "mo" : "yr"}
-            subtitle="Lorem ipsum dolor sit amet adiscing elit Mauris egestas enim."
+            duration={isMonthly ? "tháng" : "năm"}
+            subtitle="Gói Plus dành cho các cửa hàng có doanh thu trên 500 triệu/tháng."
           >
-            <OfferList text="All UI Components" status="active" />
-            <OfferList text="Use with Unlimited Projects" status="active" />
-            <OfferList text="Commercial Use" status="active" />
-            <OfferList text="Email Support" status="active" />
-            <OfferList text="Lifetime Access" status="active" />
-            <OfferList text="Free Lifetime Updates" status="active" />
+            <OfferList text="Miễn phí tư vấn và cài đặt" status="active" />
+            <OfferList text="Sử dụng không giới hạn" status="active" />
+            <OfferList text="Truy cập trên các nền tảng" status="active" />
+            <OfferList text="Hỗ trợ qua email và điện thoại" status="active" />
+            <OfferList text="Cập nhật miễn phí" status="active" />
           </PricingBox>
         </div>
       </div>
@@ -137,8 +131,8 @@ const Pricing = () => {
               y2="1131.65"
               gradientUnits="userSpaceOnUse"
             >
-              <stop stopColor="#4A6CF7" />
-              <stop offset="1" stopColor="#4A6CF7" stopOpacity="0" />
+              <stop stopColor="#C20F0F" />
+              <stop offset="1" stopColor="#C20F0F" stopOpacity="0" />
             </linearGradient>
             <linearGradient
               id="paint1_linear_93:235"
@@ -148,8 +142,8 @@ const Pricing = () => {
               y2="915.952"
               gradientUnits="userSpaceOnUse"
             >
-              <stop stopColor="#4A6CF7" />
-              <stop offset="1" stopColor="#4A6CF7" stopOpacity="0" />
+              <stop stopColor="#C20F0F" />
+              <stop offset="1" stopColor="#C20F0F" stopOpacity="0" />
             </linearGradient>
           </defs>
         </svg>

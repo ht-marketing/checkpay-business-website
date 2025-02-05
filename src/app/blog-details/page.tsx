@@ -13,6 +13,11 @@ export const metadata: Metadata = {
 const BlogDetailsPage = () => {
   return (
     <>
+    Đang cập nhật...
+    </>
+  );
+  return (
+    <>
       <section className="pb-[120px] pt-[150px]">
         <div className="container">
           <div className="-mx-4 flex flex-wrap justify-center">
