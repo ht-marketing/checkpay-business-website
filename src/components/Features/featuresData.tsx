@@ -14,7 +14,7 @@ const featuresData: Feature[] = [
   {
     id: 2,
     icon: (
-      <svg width="50" height="50" viewBox="0 0 1.5 1.5" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M.688 1.25h.625V.625A.125.125 0 0 0 1.188.5h-.25m-.25.5h.001M.688.75h.001M.688.5h.001M.438.5h.001m.499.75V.375A.125.125 0 0 0 .813.25h-.5a.125.125 0 0 0-.125.125v.875z" stroke="#C20F0F" strokeWidth=".125" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg width="50" height="50" viewBox="0 0 1.5 1.5" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M.688 1.25h.625V.625A.125.125 0 0 0 1.188.5h-.25m-.25.5h.001M.688.75h.001M.688.5h.001M.438.5h.001m.499.75V.375A.125.125 0 0 0 .813.25h-.5a.125.125 0 0 0-.125.125v.875z" stroke="#C20F0F" strokeWidth=".125" strokeLinecap="round" strokeLinejoin="round"/></svg>
     ),
     title: "Quản lý chi nhánh",
     paragraph:
@@ -23,7 +23,7 @@ const featuresData: Feature[] = [
   {
     id: 3,
     icon: (
-      <svg width="40" height="40" viewBox="0 0 1.5 1.5" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="m0.75 0.063 0.688 0.313H0.063zM0.063 1.438h1.375" stroke="#C20F0F" strokeWidth="0.09375" stroke-linecap="round" stroke-linejoin="round"/><path d="M0.125 1.25V0.563h0.25v0.688zm1 0V0.563h0.25v0.688zm-0.5 0V0.563h0.25v0.688z" stroke="#C20F0F" strokeWidth="0.09375" stroke-linejoin="round"/></svg>
+      <svg width="40" height="40" viewBox="0 0 1.5 1.5" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="m0.75 0.063 0.688 0.313H0.063zM0.063 1.438h1.375" stroke="#C20F0F" strokeWidth="0.09375" strokeLinecap="round" strokeLinejoin="round"/><path d="M0.125 1.25V0.563h0.25v0.688zm1 0V0.563h0.25v0.688zm-0.5 0V0.563h0.25v0.688z" stroke="#C20F0F" strokeWidth="0.09375" strokeLinejoin="round"/></svg>
     ),
     title: "Quản lý ngân hàng",
     paragraph:
@@ -59,7 +59,7 @@ const featuresData: Feature[] = [
   {
     id: 7,
     icon: (
-      <svg width="50" height="50" viewBox="0 0 1.5 1.5" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" fill="#C20F0F" d="m1.163.263.006.005.188.188.005.005.005.008.002.005.002.005.002.007.001.007v.011l-.001.007-.002.009-.003.007-.003.006-.004.006-.005.006-.188.188A.063.063 0 0 1 1.074.65l.005-.006.083-.081H.563A.063.063 0 0 1 .501.508L.5.5A.063.063 0 0 1 .563.437h.599L1.081.356a.063.063 0 0 1-.005-.083l.005-.006a.06.06 0 0 1 .076-.01zm-.832.969-.188-.188-.006-.007-.004-.007-.003-.007-.002-.007-.001-.006-.001-.007V.996L.127.989.129.98.13.977.132.972.134.968.137.963.14.959.143.956.331.768.337.763a.06.06 0 0 1 .077 0L.42.768l.005.006a.06.06 0 0 1 0 .077L.42.857.338.938h.6A.063.063 0 0 1 1 .993v.014a.06.06 0 0 1-.055.055l-.007.001h-.6l.081.081.005.006a.063.063 0 0 1-.088.088z"/></svg>
+      <svg width="50" height="50" viewBox="0 0 1.5 1.5" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" fill="#C20F0F" d="m1.163.263.006.005.188.188.005.005.005.008.002.005.002.005.002.007.001.007v.011l-.001.007-.002.009-.003.007-.003.006-.004.006-.005.006-.188.188A.063.063 0 0 1 1.074.65l.005-.006.083-.081H.563A.063.063 0 0 1 .501.508L.5.5A.063.063 0 0 1 .563.437h.599L1.081.356a.063.063 0 0 1-.005-.083l.005-.006a.06.06 0 0 1 .076-.01zm-.832.969-.188-.188-.006-.007-.004-.007-.003-.007-.002-.007-.001-.006-.001-.007V.996L.127.989.129.98.13.977.132.972.134.968.137.963.14.959.143.956.331.768.337.763a.06.06 0 0 1 .077 0L.42.768l.005.006a.06.06 0 0 1 0 .077L.42.857.338.938h.6A.063.063 0 0 1 1 .993v.014a.06.06 0 0 1-.055.055l-.007.001h-.6l.081.081.005.006a.063.063 0 0 1-.088.088z"/></svg>
     ),
     title: "Đối soát ngân hàng",
     paragraph:
