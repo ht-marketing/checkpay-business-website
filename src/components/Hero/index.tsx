@@ -10,9 +10,9 @@ const Hero = () => {
         <div className="container">
           <div className="-mx-4 flex flex-wrap">
             <div className="w-full px-4">
-              <div className="mx-auto max-w-[800px] text-center">
-                <h1 className="mb-5 text-3xl font-bold leading-tight text-black dark:text-white sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight">
-                Giải pháp quản lý thanh toán cho cửa hàng
+              <div className="mx-auto max-w-[1000px] text-center">
+                <h1 className="mb-3 text-3xl font-bold leading-tight text-black dark:text-white sm:text-4xl sm:leading-tight md:text-4xl md:leading-tight">
+                CheckPay - Giải pháp quản lý thanh toán cho F&B
                 </h1>
                 <p className="text-base !leading-relaxed text-body-color dark:text-body-color-dark sm:text-lg md:text-xl">
                 Check Pay giúp nhà hàng, quán ăn, quán cà phê và hộ kinh doanh theo dõi giao dịch theo thời gian thực, quản lý nhiều tài khoản ngân hàng, phân quyền nhân viên tại POS, xuất báo cáo và phân tích tài chính dễ dàng. Kiểm soát dòng tiền hiệu quả, vận hành kinh doanh thuận lợi hơn! 🚀.

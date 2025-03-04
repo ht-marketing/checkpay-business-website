@@ -13,25 +13,25 @@ const Video = () => {
     <section className="relative z-10 py-16 md:py-20 lg:py-28">
       <div className="container">
         <SectionTitle
-          title="Demo về sản phẩm"
-          paragraph="Xem video demo về sản phẩm của chúng tôi để hiểu rõ hơn về cách hoạt động của nó."
+          title="Hướng dẫn sử dụng"
+          paragraph="Xem video demo về sản phẩm của chúng tôi để hiểu rõ hơn về cách hoạt động của chúng tôi."
           center
-          mb="80px"
+          mb="30px"
         />
 
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4">
             <div
-              className="mx-auto max-w-[770px] overflow-hidden rounded-md"
+              className="mx-auto max-w-[470px] overflow-hidden rounded-md"
               data-wow-delay=".15s"
             >
-              <div className="relative aspect-[77/40] items-center justify-center">
-                <Image src="/images/video/video.jpg" alt="video image" fill />
+              <div className="relative aspect-[1/1] items-center justify-center">
+                <Image src="/images/video/video.jpeg" alt="video image" fill />
                 <div className="absolute right-0 top-0 flex h-full w-full items-center justify-center">
                   <button
                     aria-label="video play button"
                     onClick={() => setOpen(true)}
-                    className="flex h-[70px] w-[70px] items-center justify-center rounded-full bg-white bg-opacity-75 text-primary transition hover:bg-opacity-100"
+                    className="flex h-[70px] w-[70px] items-center justify-center rounded-full bg-black bg-opacity-75 text-primary transition hover:bg-opacity-100"
                   >
                     <svg
                       width="16"
@@ -54,7 +54,7 @@ const Video = () => {
         autoplay={true}
         start={true}
         isOpen={isOpen}
-        videoId="L61p2uyiMSz"
+        videoId="1IAD9HIsOKM"
         onClose={() => setOpen(false)}
       />
 
