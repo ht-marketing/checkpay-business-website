@@ -1,0 +1,391 @@
+'use client';
+
+import { useState, useRef, useEffect } from "react";
+import { bankList, Bank, getBankLogoPath } from "@/data/bankList";
+import Image from "next/image";
+
+// Simple encryption function using base64 and XOR that works with Unicode characters
+const encryptData = (data: string): string => {
+  // In a real app, fetch this from environment variables
+  const encryptionKey = process.env.NEXT_PUBLIC_ENCRYPTION_KEY || 'checkpay-default-key';
+  
+  // XOR operation with the key
+  let result = '';
+  for (let i = 0; i < data.length; i++) {
+    const charCode = data.charCodeAt(i) ^ encryptionKey.charCodeAt(i % encryptionKey.length);
+    result += String.fromCharCode(charCode);
+  }
+  
+  // Convert to base64 for URL safety - handling Unicode characters properly
+  try {
+    // First encode with encodeURIComponent to handle Unicode, then convert to base64
+    return btoa(encodeURIComponent(result).replace(/%([0-9A-F]{2})/g, (_, p1) => 
+      String.fromCharCode(parseInt(p1, 16))
+    ));
+  } catch (e) {
+    console.error("Error encoding data:", e);
+    return "";
+  }
+};
+
+// Generate custom VietQR URL
+const generateVietQRUrl = (formData: any): string => {
+  // Create a string with important user data
+  const dataToEncrypt = [
+    formData.phoneNumber,
+    formData.bank,
+    formData.accountNumber,
+    formData.displayName,
+    formData.partner,
+  ].join('|');
+  
+  // Encrypt the data
+  const encryptedData = encryptData(dataToEncrypt);
+  
+  // Create the base URL
+  let url = `https://vietqr.checkpay.vn/image/${encryptedData}.png`;
+  
+  // Add optional query parameters
+  const queryParams = [];
+  if (formData.amount) {
+    queryParams.push(`amount=${formData.amount}`);
+  } else {
+    queryParams.push('amount=');
+  }
+  if (formData.description) {
+    queryParams.push(`description=${encodeURIComponent(formData.description)}`);
+  } else {
+    queryParams.push('description=');
+  }
+  
+  // Add query parameters to URL if they exist
+  if (queryParams.length > 0) {
+    url += `?${queryParams.join('&')}`;
+  }
+  
+  return url;
+};
+
+const VietQRForm = () => {
+  const [formData, setFormData] = useState({
+    phoneNumber: "",
+    bank: "",
+    accountNumber: "",
+    displayName: "",
+    partner: "",
+    amount: "",
+    description: "",
+  });
+
+  const [errors, setErrors] = useState({
+    phoneNumber: "",
+    accountNumber: "",
+    bank: "",
+    displayName: "",
+    amount: "", // Added amount field to errors
+  });
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [generatedUrl, setGeneratedUrl] = useState(""); // State to store the generated URL
+  const [qrLoadError, setQrLoadError] = useState(false);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    
+    // Special handling for amount field
+    if (name === 'amount') {
+      // Only allow empty string or integer values
+      if (value === '' || /^[0-9]+$/.test(value)) {
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
+      }
+      return;
+    }
+    
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const validateForm = () => {
+    let valid = true;
+    let errors = { 
+      phoneNumber: "", 
+      accountNumber: "", 
+      bank: "", 
+      displayName: "",
+      amount: "" 
+    };
+
+    if (!/^\d{10}$/.test(formData.phoneNumber)) {
+      errors.phoneNumber = "Số điện thoại phải là 10 chữ số.";
+      valid = false;
+    }
+
+    if (!/^\d+$/.test(formData.accountNumber)) {
+      errors.accountNumber = "Số tài khoản phải là chữ số.";
+      valid = false;
+    }
+
+    if (!formData.bank) {
+      errors.bank = "Vui lòng chọn ngân hàng.";
+      valid = false;
+    }
+
+    if (!formData.displayName.trim()) {
+      errors.displayName = "Tên hiển thị không được để trống.";
+      valid = false;
+    }
+    
+    // Validate amount is an integer if provided
+    if (formData.amount && !Number.isInteger(Number(formData.amount))) {
+      errors.amount = "Số tiền phải là số nguyên.";
+      valid = false;
+    }
+
+    setErrors(errors);
+    return valid;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateForm()) {
+      // Generate the custom VietQR URL
+      const vietQrUrl = generateVietQRUrl(formData);
+      setGeneratedUrl(vietQrUrl);
+      console.log("Generated VietQR URL:", vietQrUrl);
+      console.log("Form Data Submitted:", formData);
+    }
+  };
+
+  // Filter banks that support transfers
+  const supportedBanks = bankList.filter(bank => bank.isTransfer === 1);
+
+  // Filter banks based on search term
+  const filteredBanks = supportedBanks.filter(bank => 
+    bank.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    bank.shortName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleBankSelect = (bin: string) => {
+    setFormData(prev => ({ ...prev, bank: bin }));
+    setDropdownOpen(false);
+    setSearchTerm("");  // Clear search term when a bank is selected
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const selectedBank = supportedBanks.find(bank => bank.bin === formData.bank);
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+        <div className="mb-4">
+          <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Số điện thoại <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            name="phoneNumber"
+            value={formData.phoneNumber}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-10 text-gray-900 dark:text-gray-100 p-2"
+          />
+          {errors.phoneNumber && <p className="text-red-500 text-sm">{errors.phoneNumber}</p>}
+          <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Vui lòng nhập số điện thoại hợp lệ.</p>
+        </div>
+        
+        <div className="mb-4" ref={dropdownRef}>
+          <label htmlFor="bank" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Ngân hàng <span className="text-red-500">*</span>
+          </label>
+          <div className="relative mt-1">
+            <button
+              type="button"
+              className="w-full flex items-center justify-between rounded-md border border-gray-300 dark:border-gray-600 shadow-sm p-2 bg-white dark:bg-gray-700 text-sm h-10"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
+              {selectedBank ? (
+                <div className="flex items-center">
+                  <div className="bg-white rounded-sm p-1 flex items-center justify-center mr-2">
+                    <Image
+                      src={getBankLogoPath(selectedBank.bin)}
+                      alt={selectedBank.shortName}
+                      width={28}
+                      height={28}
+                    />
+                  </div>
+                  <span className="text-gray-900 dark:text-gray-100">{selectedBank.shortName} - {selectedBank.name}</span>
+                </div>
+              ) : (
+                <span className="text-gray-500 dark:text-gray-400">Chọn ngân hàng</span>
+              )}
+              <svg 
+                className="h-5 w-5 text-gray-400" 
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 20 20" 
+                fill="currentColor" 
+                aria-hidden="true"
+              >
+                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+            
+            {dropdownOpen && (
+              <div className="absolute z-10 mt-1 w-full rounded-md bg-white dark:bg-gray-700 shadow-lg max-h-60 overflow-y-auto">
+                <div className="sticky top-0 bg-white dark:bg-gray-700 p-2 border-b border-gray-200 dark:border-gray-600">
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    placeholder="Tìm ngân hàng..."
+                    className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 text-gray-900 dark:text-gray-100 dark:bg-gray-800"
+                    onClick={(e) => e.stopPropagation()}  // Prevent dropdown from closing when clicking inside
+                  />
+                </div>
+                <ul className="py-1">
+                  {filteredBanks.length > 0 ? (
+                    filteredBanks.map((bank) => (
+                      <li
+                        key={bank.id}
+                        onClick={() => handleBankSelect(bank.bin)}
+                        className="flex items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600"
+                      >
+                        <div className="bg-white rounded-sm p-1 flex items-center justify-center mr-2">
+                          <Image
+                            src={getBankLogoPath(bank.bin)}
+                            alt={bank.shortName}
+                            width={28}
+                            height={28}
+                          />
+                        </div>
+                        <span className="text-gray-900 dark:text-gray-100">{bank.shortName} - {bank.name}</span>
+                      </li>
+                    ))
+                  ) : (
+                    <li className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">Không tìm thấy ngân hàng</li>
+                  )}
+                </ul>
+              </div>
+            )}
+          </div>
+          {errors.bank && <p className="text-red-500 text-sm">{errors.bank}</p>}
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="accountNumber" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Số tài khoản <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            name="accountNumber"
+            value={formData.accountNumber}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-10 text-gray-900 dark:text-gray-100 p-2"
+          />
+          {errors.accountNumber && <p className="text-red-500 text-sm">{errors.accountNumber}</p>}
+        </div>
+        <div className="mb-4">
+          <label htmlFor="displayName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Tên hiển thị <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            name="displayName"
+            value={formData.displayName}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-10 text-gray-900 dark:text-gray-100 p-2"
+          />
+          {errors.displayName && <p className="text-red-500 text-sm">{errors.displayName}</p>}
+        </div>
+        <div className="mb-4">
+          <label htmlFor="amount" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Số tiền
+          </label>
+          <input
+            type="text"
+            name="amount"
+            value={formData.amount}
+            onChange={handleChange}
+            placeholder="VND"
+            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-10 text-gray-900 dark:text-gray-100 p-2"
+          />
+          {errors.amount && <p className="text-red-500 text-sm">{errors.amount}</p>}
+        </div>
+        
+        <div className="mb-4">
+          <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Nội dung
+          </label>
+          <input
+            type="text"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-10 text-gray-900 dark:text-gray-100 p-2"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="partner" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Đối tác
+          </label>
+          <input
+            type="text"
+            name="partner"
+            value={formData.partner}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-10 text-gray-900 dark:text-gray-100 p-2"
+          />
+        </div>
+        
+        <button
+          type="submit"
+          className="w-full rounded-md bg-indigo-600 py-2 px-4 text-white font-medium shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+        >
+          Tạo liên kết VietQR
+        </button>
+      </form>
+      
+      {generatedUrl && (
+        <div className="mt-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">VietQR URL đã được tạo:</h3>
+          <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-md">
+            <p className="text-sm text-gray-800 dark:text-gray-200 break-all">{generatedUrl}</p>
+          </div>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(generatedUrl);
+              alert("URL đã được sao chép!");
+            }}
+            className="mt-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Sao chép URL
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default VietQRForm;

@@ -100,15 +100,21 @@ const menuData: Menu[] = [
     newTab: false,
   },
   {
-    id: 33,
+    id: 3,
     title: "Blog",
     path: "/blog",
     newTab: false,
   },
   {
-    id: 3,
+    id: 4,
     title: "Hỗ Trợ",
     path: "/contact",
+    newTab: false,
+  },
+  {
+    id: 5,
+    title: "VietQR",
+    path: "/vietqr",
     newTab: false,
   },
 ];
