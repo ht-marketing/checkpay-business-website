@@ -1,0 +1,10 @@
+/* Add this to your existing globals.css */
+@keyframes highlight-pulse {
+  0% { background-color: rgba(79, 70, 229, 0.1); }
+  50% { background-color: rgba(79, 70, 229, 0.2); }
+  100% { background-color: rgba(79, 70, 229, 0.1); }
+}
+
+.scale-102 {
+  transform: scale(1.02);
+}

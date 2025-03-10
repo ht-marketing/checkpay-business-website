@@ -90,6 +90,8 @@ const VietQRForm = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [generatedUrl, setGeneratedUrl] = useState(""); // State to store the generated URL
   const [qrLoadError, setQrLoadError] = useState(false);
+  const [isHighlighted, setIsHighlighted] = useState(false);
+  const resultRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -104,6 +106,26 @@ const VietQRForm = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // Effect to handle scrolling and highlighting when URL is generated
+  useEffect(() => {
+    if (generatedUrl) {
+      // Scroll to the result section
+      if (resultRef.current) {
+        resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      
+      // Apply highlight effect
+      setIsHighlighted(true);
+      
+      // Remove highlight after animation completes
+      const timer = setTimeout(() => {
+        setIsHighlighted(false);
+      }, 1500);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [generatedUrl]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -174,6 +196,8 @@ const VietQRForm = () => {
       setGeneratedUrl(vietQrUrl);
       console.log("Generated VietQR URL:", vietQrUrl);
       console.log("Form Data Submitted:", formData);
+      // Reset highlight status to ensure animation triggers even when regenerating
+      setIsHighlighted(false);
     }
   };
 
@@ -368,9 +392,23 @@ const VietQRForm = () => {
       </form>
       
       {generatedUrl && (
-        <div className="mt-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">VietQR URL đã được tạo:</h3>
-          <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-md">
+        <div 
+          ref={resultRef}
+          className={`mt-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md transition-all duration-500 ${
+            isHighlighted ? 'ring-2 ring-indigo-500 scale-102' : ''
+          }`}
+        >
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+            VietQR URL đã được tạo:
+            {isHighlighted && (
+              <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 animate-pulse">
+                Mới
+              </span>
+            )}
+          </h3>
+          <div className={`bg-gray-100 dark:bg-gray-700 p-3 rounded-md ${
+            isHighlighted ? 'bg-indigo-50 dark:bg-indigo-900/20' : ''
+          }`}>
             <p className="text-sm text-gray-800 dark:text-gray-200 break-all">{generatedUrl}</p>
           </div>
           <button

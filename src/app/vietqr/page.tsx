@@ -14,7 +14,7 @@ const ContactPage = () => {
       <Breadcrumb pageName="VietQR" description="" />
       <div className="container p-6">
         <h1 className="text-3xl font-semibold text-center my-8">
-          Cấu hình thông tin để tạo VietQR
+        Tạo mã QR ngân hàng với Check Pay
         </h1>
         <VietQRForm />
       </div>
