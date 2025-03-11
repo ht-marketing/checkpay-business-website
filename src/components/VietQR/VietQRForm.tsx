@@ -46,7 +46,7 @@ const generateVietQRUrl = (formData: any): string => {
   let url = `https://vietqr.checkpay.vn/image/${encryptedData}.png`;
   
   // Add optional query parameters
-  const queryParams = [];
+  const queryParams: string[] = [];
   if (formData.amount) {
     queryParams.push(`amount=${formData.amount}`);
   } else {
