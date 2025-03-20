@@ -37,9 +37,11 @@ const Contact = () => {
                 Cần Giúp Đỡ? Mở Phiếu Hỗ Trợ
               </h2>
               <p className="mb-12 text-base font-medium text-body-color">
-                Đội ngũ hỗ trợ của chúng tôi sẽ phản hồi bạn sớm nhất qua email.
+                Vui lòng email cho chúng tôi, thông tin tại phần Liên Hệ. Đội ngũ hỗ trợ của chúng tôi sẽ phản hồi bạn sớm nhất qua email.
+                <br></br>
+                Hoặc bạn có thể gọi điện trực tiếp cho chúng tôi qua số điện thoại hotline.
               </p>
-              <form onSubmit={handleSubmit}>
+              {/* <form onSubmit={handleSubmit}>
                 <div className="-mx-4 flex flex-wrap">
                   <div className="w-full px-4 md:w-1/2">
                     <div className="mb-8">
@@ -104,7 +106,7 @@ const Contact = () => {
                     </button>
                   </div>
                 </div>
-              </form>
+              </form> */}
             </div>
           </div>
           <div className="w-full px-4 lg:w-5/12 xl:w-4/12">

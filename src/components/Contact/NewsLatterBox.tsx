@@ -12,24 +12,13 @@ const NewsLatterBox = () => {
       </h3>
       <div className="mb-4">
         <p className="text-lg font-semibold text-body-color dark:text-body-color-dark">
-          Phan Văn Trung
+          Admin Check Pay
         </p>
         <p className="text-base text-body-color dark:text-body-color-dark">
           Điện thoại: 0938.894.833
         </p>
         <p className="text-base text-body-color dark:text-body-color-dark">
-          Email: trungpv123@gmail.com
-        </p>
-      </div>
-      <div>
-        <p className="text-lg font-semibold text-body-color dark:text-body-color-dark">
-          Hồ Hiếu
-        </p>
-        <p className="text-base text-body-color dark:text-body-color-dark">
-          Điện thoại: 0971.043.944
-        </p>
-        <p className="text-base text-body-color dark:text-body-color-dark">
-          Email: hohieu.work@gmail.com
+          Email: admin@checkpay.vn
         </p>
       </div>
 

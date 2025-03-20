@@ -5,7 +5,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Hỗ trợ",
-  description: "Phan Van Trung - 0938.894.833 - trungpv123@gmail.com",
+  description: "Hotline - 0938.894.833 - admin@checkpay.vn",
   // other metadata
 };
 

@@ -306,7 +306,7 @@ const BlogDetailsPage = () => {
                 </p>
                 <ul>
                   <li>
-                    <p>By email: hohieu.work@gmail.com</p>
+                    <p>By email: admin@checkpay.vn</p>
                   </li>
                   <li>
                     <p>
@@ -321,7 +321,7 @@ const BlogDetailsPage = () => {
                     </p>
                   </li>
                   <li>
-                    <p>By phone number: +84971043944</p>
+                    <p>By phone number: +84938894833</p>
                   </li>
                 </ul>
               </div>
