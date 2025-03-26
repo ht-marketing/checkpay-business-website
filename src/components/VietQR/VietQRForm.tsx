@@ -57,7 +57,8 @@ const generateVietQRUrl = (formData: any): string => {
   } else {
     queryParams.push('description=');
   }
-
+  
+  queryParams.push('type=qr_amount_logo');
   // Add query parameters to URL if they exist
   if (queryParams.length > 0) {
     url += `?${queryParams.join('&')}`;
@@ -226,9 +227,9 @@ const VietQRForm = () => {
     <div>
       <h3 className="text-lg font-medium mb-2">Cấu trúc của 1 link QR ngân hàng</h3>
       <div className="mb-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-        <div className="text-gray-700 dark:text-gray-300 mb-4">
+      <div className="text-gray-700 dark:text-gray-300 mb-4">
           <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-md font-mono text-sm break-all">
-            https://vietqr.checkpay.vn/image/[mã_rút_gọn_stk].png?amount=<span className="text-green-600 dark:text-green-400">[số_tiền]</span>&description=<span className="text-blue-600 dark:text-blue-400">[nội_dung]</span>
+            https://vietqr.checkpay.vn/image/[mã_rút_gọn_stk].png?amount=<span className="text-green-600 dark:text-green-400">[số_tiền]</span>&description=<span className="text-blue-600 dark:text-blue-400">[nội_dung]</span>&type=<span className="text-purple-600 dark:text-purple-400">[loại_qr]</span>
           </div>
           <div className="mt-3 text-sm">
             <p><span className="font-semibold">Trong đó:</span></p>
@@ -236,6 +237,7 @@ const VietQRForm = () => {
               <li><span className="font-medium">[mã_rút_gọn_stk]</span>: Thông tin tài khoản được tạo và rút gọn sau khi tạo liên kết</li>
               <li><span className="font-medium text-green-600 dark:text-green-400">[số_tiền]</span>: Số tiền chuyển khoản</li>
               <li><span className="font-medium text-blue-600 dark:text-blue-400">[nội_dung]</span>: Nội dung chuyển khoản</li>
+                <li><span className="font-medium text-purple-600 dark:text-purple-400">[loại_qr]</span>: Loại QR (<span className="italic">qr</span>: chỉ QR, <span className="italic">qr_amount</span>: QR + số tiền, <span className="italic">qr_amount_logo</span>: đầy đủ)</li>
             </ul>
           </div>
         </div>
@@ -418,7 +420,7 @@ const VietQRForm = () => {
             }`}
         >
           <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-            VietQR URL với số tiền và nội dung chuyển khoản
+            VietQR URL với số tiền
             {isHighlighted && (
               <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 animate-pulse">
                 Mới
