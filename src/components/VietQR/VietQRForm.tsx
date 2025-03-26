@@ -418,7 +418,7 @@ const VietQRForm = () => {
             }`}
         >
           <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-            VietQR URL đã được tạo:
+            VietQR URL với số tiền và nội dung chuyển khoản
             {isHighlighted && (
               <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 animate-pulse">
                 Mới
@@ -440,7 +440,7 @@ const VietQRForm = () => {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
-              Sao chép URL
+              Sao chép URL với số tiền
             </button>
             <button
               onClick={() => window.open(generatedUrl, '_blank')}
@@ -451,6 +451,32 @@ const VietQRForm = () => {
               </svg>
               Hiển thị QR
             </button>
+          </div>
+          
+          {/* URL for software integration */}
+          <div className="mt-6 border-t border-gray-200 dark:border-gray-700 pt-4">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+            URL hỗ trợ các phầm mềm khác tích hợp QR thanh toán cho đơn hàng
+            </h3>
+            <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-md">
+              <p className="text-sm text-gray-800 dark:text-gray-200 break-all">
+                {generatedUrl.split('?')[0]}
+              </p>
+            </div>
+            <div className="mt-3">
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(generatedUrl.split('?')[0]);
+                  alert("URL hỗ trợ các phầm mềm khác tích hợp QR thanh toán cho đơn hàng");
+                }}
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                Sao chép URL tích hợp
+              </button>
+            </div>
           </div>
         </div>
       )}
