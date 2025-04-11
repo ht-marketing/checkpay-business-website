@@ -80,5 +80,11 @@ const menuData: Menu[] = [
       },
     ],
   },
+  {
+    id: 6,
+    title: "Đăng ký",
+    path: "/register",
+    newTab: false,
+  },
 ];
 export default menuData;
