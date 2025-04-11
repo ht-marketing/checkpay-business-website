@@ -117,5 +117,11 @@ const menuData: Menu[] = [
     path: "/vietqr",
     newTab: false,
   },
+  {
+    id: 6,
+    title: "Đăng ký",
+    path: "/register",
+    newTab: false,
+  },
 ];
 export default menuData;

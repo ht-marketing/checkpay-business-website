@@ -1,5 +1,5 @@
 import Breadcrumb from "@/components/Common/Breadcrumb";
-import VietQRForm from "@/components/VietQR/VietQRForm";
+import RegisterForm from "@/components/Register/RegisterForm";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,18 +8,18 @@ export const metadata: Metadata = {
   // other metadata
 };
 
-const VietQRPage = () => {
+const RegisterPage = () => {
   return (
     <>
-      <Breadcrumb pageName="VietQR" description="" />
+      <Breadcrumb pageName="Đăng ký" description="" />
       <div className="container p-6">
         <h1 className="text-3xl font-semibold text-center my-8">
-        Tạo mã QR ngân hàng online với Check Pay
+        Tạo tài khoản để sử dụng dịch vụ
         </h1>
-        <VietQRForm />
+        <RegisterForm />
       </div>
     </>
   );
 };
 
-export default VietQRPage;
+export default RegisterPage;
