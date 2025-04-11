@@ -47,6 +47,10 @@ const generateVietQRUrl = (formData: any): string => {
 
   // Add optional query parameters
   const queryParams: string[] = [];
+
+  // Add type parameter using the selected type or default to qr_amount_logo
+  queryParams.push(`type=${formData.type || 'qr_amount_logo'}`);
+
   if (formData.amount) {
     queryParams.push(`amount=${formData.amount}`);
   } else {
@@ -57,8 +61,7 @@ const generateVietQRUrl = (formData: any): string => {
   } else {
     queryParams.push('description=');
   }
-  
-  queryParams.push('type=qr_amount_logo');
+
   // Add query parameters to URL if they exist
   if (queryParams.length > 0) {
     url += `?${queryParams.join('&')}`;
@@ -76,6 +79,7 @@ const VietQRForm = () => {
     partner: "", // Default to empty string to require explicit partner selection
     amount: "",
     description: "",
+    type: "qr_amount_logo", // Default type
   });
 
   const [errors, setErrors] = useState({
@@ -223,21 +227,35 @@ const VietQRForm = () => {
 
   const selectedBank = supportedBanks.find(bank => bank.bin === formData.bank);
 
+  // Function to generate URL with only partner and type params
+  const generatePartnerTypeUrl = () => {
+    const baseUrl = generatedUrl.split('?')[0];
+    const typeParam = formData.type || 'qr_amount_logo';
+    return `${baseUrl}?type=${typeParam}`;
+  };
+
+  // Function to generate URL with only type param (for integration)
+  const generateUrlWithType = () => {
+    const baseUrl = generatedUrl.split('?')[0];
+    const typeParam = formData.type || 'qr_amount_logo';
+    return `${baseUrl}?type=${typeParam}`;
+  };
+
   return (
     <div>
       <h3 className="text-lg font-medium mb-2">Cấu trúc của 1 link QR ngân hàng</h3>
       <div className="mb-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
       <div className="text-gray-700 dark:text-gray-300 mb-4">
           <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-md font-mono text-sm break-all">
-            https://vietqr.checkpay.vn/image/[mã_rút_gọn_stk].png?amount=<span className="text-green-600 dark:text-green-400">[số_tiền]</span>&description=<span className="text-blue-600 dark:text-blue-400">[nội_dung]</span>&type=<span className="text-purple-600 dark:text-purple-400">[loại_qr]</span>
+            https://vietqr.checkpay.vn/image/[mã_rút_gọn_stk].png?type=<span className="text-purple-600 dark:text-purple-400">[loại_qr]</span>&amount=<span className="text-green-600 dark:text-green-400">[số_tiền]</span>&description=<span className="text-blue-600 dark:text-blue-400">[nội_dung]</span>
           </div>
           <div className="mt-3 text-sm">
             <p><span className="font-semibold">Trong đó:</span></p>
             <ul className="list-disc pl-5 mt-2 space-y-1">
+            <li><span className="font-medium text-purple-600 dark:text-purple-400">[loại_qr]</span>: Loại QR (<span className="italic">qr</span>: chỉ QR, <span className="italic">qr_amount</span>: QR + số tiền, <span className="italic">qr_amount_logo</span>: đầy đủ)</li>
               <li><span className="font-medium">[mã_rút_gọn_stk]</span>: Thông tin tài khoản được tạo và rút gọn sau khi tạo liên kết</li>
               <li><span className="font-medium text-green-600 dark:text-green-400">[số_tiền]</span>: Số tiền chuyển khoản</li>
               <li><span className="font-medium text-blue-600 dark:text-blue-400">[nội_dung]</span>: Nội dung chuyển khoản</li>
-                <li><span className="font-medium text-purple-600 dark:text-purple-400">[loại_qr]</span>: Loại QR (<span className="italic">qr</span>: chỉ QR, <span className="italic">qr_amount</span>: QR + số tiền, <span className="italic">qr_amount_logo</span>: đầy đủ)</li>
             </ul>
           </div>
         </div>
@@ -390,6 +408,23 @@ const VietQRForm = () => {
             className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-10 text-gray-900 dark:text-gray-100 p-2"
           />
         </div>
+
+        <div className="mb-4">
+          <label htmlFor="type" className="block text-xm font-medium text-gray-700 dark:text-gray-300">
+            Loại QR
+          </label>
+          <select
+            name="type"
+            value={formData.type}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-10 text-gray-900 dark:text-gray-100 p-2"
+          >
+            <option value="qr">Chỉ QR</option>
+            <option value="qr_amount">QR + số tiền</option>
+            <option value="qr_amount_logo">QR đầy đủ (có logo)</option>
+          </select>
+        </div>
+
         <div className="mb-4">
           <label htmlFor="partner" className="block text-xm font-medium text-gray-700 dark:text-gray-300">
             Đối tác
@@ -454,22 +489,22 @@ const VietQRForm = () => {
               Hiển thị QR
             </button>
           </div>
-          
+
           {/* URL for software integration */}
           <div className="mt-6 border-t border-gray-200 dark:border-gray-700 pt-4">
             <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-            URL hỗ trợ các phầm mềm khác tích hợp QR thanh toán cho đơn hàng
+              URL hỗ trợ các phầm mềm khác tích hợp QR thanh toán cho đơn hàng
             </h3>
             <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-md">
               <p className="text-sm text-gray-800 dark:text-gray-200 break-all">
-                {generatedUrl.split('?')[0]}
+                {generateUrlWithType()}
               </p>
             </div>
-            <div className="mt-3">
+            <div className="mt-3 flex flex-wrap gap-3">
               <button
                 onClick={() => {
-                  navigator.clipboard.writeText(generatedUrl.split('?')[0]);
-                  alert("URL hỗ trợ các phầm mềm khác tích hợp QR thanh toán cho đơn hàng");
+                  navigator.clipboard.writeText(generateUrlWithType());
+                  alert("URL tích hợp với tham số loại QR đã được sao chép!");
                 }}
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
