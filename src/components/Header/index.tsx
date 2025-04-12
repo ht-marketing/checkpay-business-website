@@ -154,7 +154,7 @@ const Header = () => {
                 <div className="flex items-center space-x-4">
                   <Link
                     href={'/register'}
-                    className="ease-in-up hidden rounded-md bg-primary px-8 py-3 text-base font-medium text-ưhite transition duration-300 hover:bg-opacity-90 hover:shadow-signUp md:inline-block"
+                    className="ease-in-up hidden rounded-md bg-primary px-8 py-3 text-base font-medium text-white transition duration-300 hover:bg-opacity-90 hover:shadow-signUp md:inline-block"
                   >
                     {"Đăng ký ngay"}
                   </Link>

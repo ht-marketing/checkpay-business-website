@@ -91,6 +91,18 @@ const RegisterForm = () => {
       valid = false;
     }
 
+    // Short name validation - applied to both customer types
+    if (formData.shortName.trim()) {
+      // Check for only letters and underscores
+      if (!/^[a-zA-Z_]+$/.test(formData.shortName)) {
+        newErrors.shortName = "Tên viết tắt chỉ được chứa chữ cái và dấu gạch dưới (_)";
+        valid = false;
+      } else if (formData.shortName.trim().length < 7) {
+        newErrors.shortName = "Tên viết tắt phải có ít nhất 7 ký tự";
+        valid = false;
+      }
+    }
+
     // Organization fields validation
     if (formData.customerType === "organization") {
       if (!formData.companyName.trim()) {
@@ -100,9 +112,6 @@ const RegisterForm = () => {
 
       if (!formData.shortName.trim()) {
         newErrors.shortName = "Vui lòng nhập tên viết tắt";
-        valid = false;
-      } else if (formData.shortName.trim().length < 7) {
-        newErrors.shortName = "Tên viết tắt phải có ít nhất 7 ký tự";
         valid = false;
       }
     }
@@ -115,9 +124,6 @@ const RegisterForm = () => {
 
       if (!formData.shortName.trim()) {
         newErrors.shortName = "Vui lòng nhập tên viết tắt";
-        valid = false;
-      } else if (formData.shortName.trim().length < 7) {
-        newErrors.shortName = "Tên viết tắt phải có ít nhất 7 ký tự";
         valid = false;
       }
     }
@@ -230,41 +236,82 @@ const RegisterForm = () => {
     );
   };
 
-  // Success screen component
-  const SuccessScreen = ({ message }: { message: string }) => (
-    <div className="text-center py-8">
-      <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
-        <svg
-          className="h-6 w-6 text-green-600"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M5 13l4 4L19 7"
-          ></path>
-        </svg>
+  // Success screen component - enhanced version with disabled button
+  const SuccessScreen = ({ message }: { message: string }) => {
+    const [confirmed, setConfirmed] = useState(false);
+    
+    return (
+      <div className="text-center py-8">
+        <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6">
+          <svg
+            className="h-8 w-8 text-green-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M5 13l4 4L19 7"
+            ></path>
+          </svg>
+        </div>
+        <h3 className="text-2xl leading-6 font-bold text-gray-900 dark:text-gray-100 mb-4">
+          Đăng ký thành công!
+        </h3>
+        
+        <div className="mt-4 mb-6 p-5 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded-md mx-auto max-w-lg shadow-sm">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="mt-2 text-lg text-red-700 dark:text-red-300 font-medium text-left">
+                {message}
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="mt-8 mb-6">
+          <label className="flex items-center justify-center space-x-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={confirmed}
+              onChange={() => setConfirmed(!confirmed)}
+              className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+            />
+            <span className="text-gray-700 dark:text-gray-300 font-medium">
+              Tôi xác nhận đã kiểm tra email và đặt mật khẩu cho tài khoản
+            </span>
+          </label>
+        </div>
+        
+        <div className="mt-4">
+          <Link
+            href="https://checkpay.vn/download"
+            className={`inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-md text-white transition-colors duration-200 ${
+              confirmed 
+                ? "bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" 
+                : "bg-indigo-400 cursor-not-allowed"
+            }`}
+            onClick={(e) => !confirmed && e.preventDefault()}
+            aria-disabled={!confirmed}
+            tabIndex={confirmed ? 0 : -1}
+          >
+            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+            </svg>
+            Đăng nhập ngay
+          </Link>
+        </div>
       </div>
-      <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100">
-        Đăng ký thành công!
-      </h3>
-      <div className="mt-2">
-        <p className="text-sm text-gray-500 dark:text-gray-400">{message}</p>
-      </div>
-      <div className="mt-6">
-        <Link
-          href="https://checkpay.vn/download"
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Tải ứng dụng
-        </Link>
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
@@ -392,7 +439,7 @@ const RegisterForm = () => {
                 />
                 {!errors.shortName && formData.shortName && (
                   <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
-                    Tên viết tắt phải có ít nhất 7 ký tự
+                    Tên viết tắt phải có ít nhất 7 ký tự và chỉ chứa chữ cái và dấu gạch dưới (_)
                   </p>
                 )}
               </div>
@@ -424,7 +471,7 @@ const RegisterForm = () => {
                 />
                 {!errors.shortName && formData.shortName && (
                   <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
-                    Tên viết tắt phải có ít nhất 7 ký tự
+                    Tên viết tắt phải có ít nhất 7 ký tự và chỉ chứa chữ cái và dấu gạch dưới (_)
                   </p>
                 )}
               </div>
