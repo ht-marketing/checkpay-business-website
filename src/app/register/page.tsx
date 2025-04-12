@@ -13,9 +13,6 @@ const RegisterPage = () => {
     <>
       <Breadcrumb pageName="Đăng ký" description="" />
       <div className="container p-6">
-        <h1 className="text-3xl font-semibold text-center my-8">
-        Tạo tài khoản để sử dụng dịch vụ
-        </h1>
         <RegisterForm />
       </div>
     </>
