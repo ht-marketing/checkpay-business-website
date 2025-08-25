@@ -1,13 +1,40 @@
 'use client';
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { bankList, Bank, getBankLogoPath } from "@/data/bankList";
 import Image from "next/image";
 
+// Add at the top of the file
+interface FormData {
+  phoneNumber: string;
+  bank: string;
+  accountNumber: string;
+  displayName: string;
+  partner: string;
+  amount: string;
+  description: string;
+  type: 'qr' | 'qr_amount' | 'qr_amount_logo';
+}
+
+interface FormErrors {
+  phoneNumber: string;
+  accountNumber: string;
+  bank: string;
+  displayName: string;
+  amount: string;
+}
+
 // Simple encryption function using base64 and XOR that works with Unicode characters
 const encryptData = (data: string): string => {
-  // In a real app, fetch this from environment variables
-  const encryptionKey = process.env.NEXT_PUBLIC_ENCRYPTION_KEY || 'checkpay-default-key';
+  // Add input validation
+  if (!data) {
+    throw new Error('Data to encrypt cannot be empty');
+  }
+
+  const encryptionKey = process.env.NEXT_PUBLIC_ENCRYPTION_KEY;
+  if (!encryptionKey) {
+    throw new Error('Encryption key not found in environment variables');
+  }
 
   // XOR operation with the key
   let result = '';
@@ -71,7 +98,7 @@ const generateVietQRUrl = (formData: any): string => {
 };
 
 const VietQRForm = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     phoneNumber: "",
     bank: "",
     accountNumber: "",
@@ -82,7 +109,7 @@ const VietQRForm = () => {
     type: "qr_amount_logo", // Default type
   });
 
-  const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState<FormErrors>({
     phoneNumber: "",
     accountNumber: "",
     bank: "",
@@ -97,6 +124,30 @@ const VietQRForm = () => {
   const [qrLoadError, setQrLoadError] = useState(false);
   const [isHighlighted, setIsHighlighted] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
+
+  const initialFormState = {
+    phoneNumber: "",
+    bank: "",
+    accountNumber: "",
+    displayName: "",
+    partner: "",
+    amount: "",
+    description: "",
+    type: "qr_amount_logo" as const,
+  };
+
+  const resetForm = () => {
+    setFormData(initialFormState);
+    setErrors({
+      phoneNumber: "",
+      accountNumber: "",
+      bank: "",
+      displayName: "",
+      amount: "",
+    });
+    setGeneratedUrl("");
+    setQrLoadError(false);
+  };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -209,21 +260,25 @@ const VietQRForm = () => {
   // Filter banks that support transfers
   const supportedBanks = bankList.filter(bank => bank.isTransfer === 1);
 
-  // Filter banks based on search term
-  const filteredBanks = supportedBanks.filter(bank =>
-    bank.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    bank.shortName.toLowerCase().includes(searchTerm.toLowerCase())
+  // Memoize filtered banks
+  const filteredBanks = useMemo(() => 
+    supportedBanks.filter(bank =>
+      bank.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      bank.shortName.toLowerCase().includes(searchTerm.toLowerCase())
+    ),
+    [searchTerm]
   );
 
-  const handleBankSelect = (bin: string) => {
+  // Memoize handlers
+  const handleBankSelect = useCallback((bin: string) => {
     setFormData(prev => ({ ...prev, bank: bin }));
     setDropdownOpen(false);
-    setSearchTerm("");  // Clear search term when a bank is selected
-  };
+    setSearchTerm("");
+  }, []);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
-  };
+  }, []);
 
   const selectedBank = supportedBanks.find(bank => bank.bin === formData.bank);
 
@@ -517,6 +572,33 @@ const VietQRForm = () => {
           </div>
         </div>
       )}
+
+      {generatedUrl && (
+        <div>
+          {qrLoadError ? (
+            <div className="text-red-500 mt-2">
+              Failed to load QR code. Please try again.
+            </div>
+          ) : (
+            <Image
+              src={generatedUrl}
+              alt="VietQR Code"
+              width={200}
+              height={200}
+              onError={() => setQrLoadError(true)}
+              onLoad={() => setQrLoadError(false)}
+            />
+          )}
+        </div>
+      )}
+
+      <button
+        type="button"
+        onClick={resetForm}
+        className="mt-2 w-full rounded-md bg-gray-200 py-2 px-4 text-gray-700 font-medium shadow-sm hover:bg-gray-300"
+      >
+        Reset Form
+      </button>
     </div>
   );
 };
