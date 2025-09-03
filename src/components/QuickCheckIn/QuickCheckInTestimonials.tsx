@@ -86,8 +86,8 @@ const QuickCheckInTestimonials = () => {
 
               <div className="mt-8 text-center">
                 <blockquote className="text-lg italic text-body-color">
-                  "QuickCheckIn không chỉ là công cụ, mà là đối tác chiến lược giúp chúng tôi 
-                  xây dựng thương hiệu mạnh mẽ trong ngành F&B"
+                  QuickCheckIn không chỉ là công cụ, mà là đối tác chiến lược giúp chúng tôi 
+                  xây dựng thương hiệu mạnh mẽ trong ngành F&B
                 </blockquote>
                 <cite className="mt-4 block text-sm font-semibold text-black dark:text-white">
                   - Nguyễn Văn An, Chủ Nhà Hàng Món Huế
