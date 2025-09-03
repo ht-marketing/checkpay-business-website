@@ -258,7 +258,7 @@ const VietQRForm = () => {
   };
 
   // Filter banks that support transfers
-  const supportedBanks = bankList.filter(bank => bank.isTransfer === 1);
+  const supportedBanks = bankList;
 
   // Memoize filtered banks
   const filteredBanks = useMemo(() => 
@@ -266,7 +266,7 @@ const VietQRForm = () => {
       bank.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       bank.shortName.toLowerCase().includes(searchTerm.toLowerCase())
     ),
-    [searchTerm]
+    [searchTerm, supportedBanks]
   );
 
   // Memoize handlers
